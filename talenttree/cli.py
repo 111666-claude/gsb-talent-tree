@@ -2,7 +2,7 @@
 
 import argparse
 
-from .tree import Node, cycles, respec, unlock
+from .tree import Node, TalentError, cycles, respec, unlock
 
 
 def sample_tree():
@@ -25,7 +25,10 @@ def main(argv=None):
     state = {"points": 5, "spent": 0, "ranks": {}}
     if args.sample == "budget":
         unlock(state, tree, "a")
-        unlock(state, tree, "b")
+        try:
+            unlock(state, tree, "b")
+        except TalentError:
+            pass  # 剩余 2 点不够 b(4)，按口径拒绝
         print("points=%d spent=%d" % (state["points"], state["spent"]))
     elif args.sample == "respec":
         unlock(state, tree, "a")
